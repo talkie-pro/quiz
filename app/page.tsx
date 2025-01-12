@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { Check, ChevronLeft, ArrowRight, Stethoscope, School, ShoppingCart, Users, MessageCircle, ThumbsUp, HelpCircle, AlertTriangle } from 'lucide-react'
 import Logo from './assets/logo.svg'
+import ProgressBar from './components/ProgressBar'
 
 interface QuestionOption {
   text: string
@@ -486,6 +487,7 @@ export default function Component() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<string>('monthly')
   const videoRef = useRef<HTMLIFrameElement>(null)
+  const [currentStep, setCurrentStep] = useState(1)
 
   useEffect(() => {
     const storedName = localStorage.getItem('userName')
@@ -589,7 +591,9 @@ export default function Component() {
     setPercentage(parseFloat(finalPercentage.toFixed(1)))
   }
 
-  const currentStep = step
+  const handleStepChange = (step: number) => {
+    setCurrentStep(step)
+  }
 
   const renderProgressBar = () => {
     return (
@@ -621,8 +625,9 @@ export default function Component() {
   const renderNameInput = () => (
     <motion.div
       key="start"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
       className="w-full max-w-lg px-4 mb-[10px]"
     >
       <div className="flex justify-center mb-8">
@@ -677,10 +682,10 @@ export default function Component() {
     <AnimatePresence mode="wait">
       <motion.div
         key={currentQuestion?.id}
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -100 }}
-        transition={{ duration: 0.5, ease: 'easeInOut' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
         className="w-full max-w-md mx-auto mt-[50px]"
       >
         <h2 className="text-xl font-semibold text-[#2D2B42] mb-6 text-left">
@@ -690,12 +695,11 @@ export default function Component() {
           {currentQuestion?.options.map((option, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ 
-                duration: 0.3, 
-                delay: index * 0.1,
-                ease: 'easeOut'
+                duration: 0.2, 
+                delay: index * 0.05
               }}
               className="w-full"
             >
@@ -777,22 +781,23 @@ export default function Component() {
   const renderResult = () => (
     <motion.div
       key="result"
-      initial={{opacity: 0}}
-      animate={{opacity: 1}}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
       className="w-full max-w-md mx-auto mt-[50px]"
     >
       <motion.p
-        initial={{opacity: 0, y: 20}}
-        animate={{opacity: 1, y: 0}}
-        transition={{delay: 0.5, duration: 0.5}}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1, duration: 0.2 }}
         className="text-xl font-semibold text-[#2D2B42] mb-8 text-left"
       >
         {name}, o Talkie pode aumentar sua confiança em até {percentage}% nestas situações cruciais:
       </motion.p>
       <motion.div
-        initial={{opacity: 0, y: 20}}
-        animate={{opacity: 1, y: 0}}
-        transition={{delay: 1, duration: 0.5}}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.2 }}
         className="mb-8 text-left"
       >
         <ul className="list-disc pl-5 space-y-2">
@@ -804,9 +809,9 @@ export default function Component() {
         </ul>
       </motion.div>
       <motion.div
-        initial={{opacity: 0, y: 20}}
-        animate={{opacity: 1, y: 0}}
-        transition={{delay: 1.5, duration: 0.5}}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.2 }}
         className="flex justify-end"
       >
         <button
@@ -1093,8 +1098,58 @@ export default function Component() {
     </motion.div>
   )
 
+  // Função para mapear o step atual para um número sequencial
+  const getProgressStep = (currentStep: number) => {
+    // Identifica qual rota baseado na primeira resposta (step 1)
+    const firstResponse = responses[1];
+    let totalStepsInRoute = 4; // Padrão
+
+    if (firstResponse) {
+      if (firstResponse.includes('Consultas médicas')) {
+        // Rota médica: 1 -> 2 -> 3 -> 4 -> 11 -> 12
+        totalStepsInRoute = 6;
+        if (currentStep === 11) return 5;
+        if (currentStep === 12) return 6;
+        return currentStep;
+      } else if (firstResponse.includes('Acompanhamento escolar')) {
+        // Rota escolar: 1 -> 5 -> 6 -> 7 -> 11 -> 12
+        totalStepsInRoute = 6;
+        if (currentStep === 5) return 2;
+        if (currentStep === 6) return 3;
+        if (currentStep === 7) return 4;
+        if (currentStep === 11) return 5;
+        if (currentStep === 12) return 6;
+        return currentStep;
+      } else if (firstResponse.includes('Situações do dia')) {
+        // Rota dia a dia: 1 -> 8 -> 9 -> 10 -> 11 -> 12
+        totalStepsInRoute = 6;
+        if (currentStep === 8) return 2;
+        if (currentStep === 9) return 3;
+        if (currentStep === 10) return 4;
+        if (currentStep === 11) return 5;
+        if (currentStep === 12) return 6;
+        return currentStep;
+      }
+    }
+
+    // Antes da primeira escolha, mostra apenas o passo 1
+    return currentStep <= 1 ? currentStep : 1;
+  };
+
+  const getTotalSteps = () => {
+    // Todas as rotas têm 6 passos no total
+    return 6;
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#F8F9FC] to-white text-[#2D2B42] font-inter">
+      {step > 0 && step <= 12 && (
+        <ProgressBar 
+          currentStep={getProgressStep(step)} 
+          totalSteps={6} 
+          onBack={handleBack}
+        />
+      )}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
         {step === 0 && renderNameInput()}
         {step > 0 && step < 12 && renderQuestion()}
