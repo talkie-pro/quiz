@@ -1,0 +1,47 @@
+{
+  "rules": [
+    {
+      "pattern": "**/*.{ts,tsx,js,jsx}",
+      "autoformat": true,
+      "autofix": true,
+      "autocomplete": true
+    },
+    {
+      "pattern": "**/*.{css,scss}",
+      "autoformat": true,
+      "autofix": true
+    },
+    {
+      "pattern": "**/*.{json,md,yaml,yml}",
+      "autoformat": true
+    }
+  ],
+  "formatOnSave": true,
+  "organizeImportsOnSave": true,
+  "removeUnusedImportsOnSave": true,
+  "defaultFormatter": "prettier",
+  "gitCommitOnSave": true,
+  "gitConfig": {
+    "commitMessageTemplate": "{{type}}: {{description}}",
+    "branchPrefix": "feature/",
+    "remoteName": "origin",
+    "defaultBranch": "main",
+    "generateCommitMessage": true,
+    "commitTypes": [
+      "feat",
+      "fix",
+      "docs",
+      "style",
+      "refactor",
+      "test",
+      "chore"
+    ],
+    "commitScopes": [
+      "ui",
+      "api",
+      "quiz",
+      "auth",
+      "config"
+    ]
+  }
+}
