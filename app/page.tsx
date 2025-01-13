@@ -3,7 +3,19 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { Check, ChevronLeft, ArrowRight, Stethoscope, School, ShoppingCart, Users, MessageCircle, ThumbsUp, HelpCircle, AlertTriangle } from 'lucide-react'
+import { 
+  Check,
+  ChevronLeft,
+  ArrowRight,
+  Stethoscope,
+  School,
+  ShoppingCart,
+  Users,
+  MessageCircle,
+  ThumbsUp,
+  HelpCircle,
+  AlertTriangle
+} from 'lucide-react'
 import Logo from './assets/logo.svg'
 import ProgressBar from './components/ProgressBar'
 
@@ -467,8 +479,7 @@ const planDetails: PlanDetails = {
       'Suporte na sua língua',
       'Tecnologia fácil de usar, disponível no celular',
       'Cancele quando quiser',
-    ],
-    price_id: 'price_1QelpxCtj12TECPElkwlyxDl',
+    ]
   }
 }
 
@@ -630,14 +641,16 @@ export default function Component() {
       transition={{ duration: 0.2 }}
       className="w-full max-w-lg px-4 mb-[10px]"
     >
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-start mb-8">
         <Image
           src={Logo}
           alt="Logo"
-          width={150}
-          height={50}
-          className="w-[150px] h-auto"
+          width={115}
+          height={40}
+          className="h-10 w-fit"
           priority
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMTUwIDUwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iNTAiIGZpbGw9IiNFNUU3RUIiLz48L3N2Zz4="
         />
       </div>
       <h1 className="text-xl font-semibold text-[#2D2B42] text-left mb-2">
@@ -687,10 +700,14 @@ export default function Component() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className="w-full max-w-md mx-auto mt-[50px]"
+        layoutId="question-container"
       >
-        <h2 className="text-xl font-semibold text-[#2D2B42] mb-6 text-left">
+        <motion.h2 
+          className="text-xl font-semibold text-[#2D2B42] mb-6 text-left"
+          layoutId="question-text"
+        >
           {currentQuestion?.question.replace('__NAME__', name)}
-        </h2>
+        </motion.h2>
         <div className="space-y-4">
           {currentQuestion?.options.map((option, index) => (
             <motion.div
@@ -698,18 +715,18 @@ export default function Component() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ 
-                duration: 0.2, 
-                delay: index * 0.05
+                duration: 0.15,
+                delay: index * 0.05 
               }}
               className="w-full"
+              layout
             >
               <button
                 onClick={() => handleNext(option.next, option.text)}
                 className="w-full relative overflow-hidden bg-white border-2 border-gray-100 rounded-2xl transition-transform duration-200 ease-out active:scale-95"
               >
-                <div className="absolute inset-0 opacity-0 transition-opacity duration-200" />
                 <div className="relative flex items-center gap-4 p-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#F8F5FF] flex items-center justify-center transition-colors duration-200">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#F8F5FF] flex items-center justify-center">
                     {option.icon}
                   </div>
                   <span className="text-lg text-[#2D2B42] text-left">{option.text}</span>
@@ -846,7 +863,7 @@ export default function Component() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <motion.div 
-              className="flex justify-center mb-4"
+              className="flex justify-start mb-4"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -854,15 +871,15 @@ export default function Component() {
               <Image
                 src={Logo}
                 alt="Logo"
-                width={120}
+                width={115}
                 height={40}
-                className="w-[120px] h-auto"
+                className="h-10 w-fit"
                 priority
               />
             </motion.div>
 
             <motion.div 
-              className="text-center mb-8"
+              className="text-left mb-8"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
@@ -929,7 +946,7 @@ export default function Component() {
                 transition={{ duration: 0.4, delay: 1 }}
               >
                 <button
-                  onClick={() => window.location.href = 'https://buy.stripe.com/14k2aA4Aybzw5ZS8x4'}
+                  onClick={() => window.location.href = 'https://buy.stripe.com/cN29D2eb8fPM9c4aFd'}
                   className="w-full bg-gradient-to-r from-[#6E56CF] to-[#9B7EFF] hover:from-[#5B46B3] hover:to-[#8B6EFF] text-white rounded-xl py-4 text-lg font-semibold transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
                 >
                   Assinar Agora
@@ -951,9 +968,6 @@ export default function Component() {
                 </svg>
                 <span>Pagamento 100% seguro via Stripe</span>
               </div>
-              <p className="text-xs text-[#6C6F7F]">
-                Ao continuar, você concorda com nossos Termos de Serviço e Política de Privacidade
-              </p>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -1017,7 +1031,7 @@ export default function Component() {
   }
 
   const handleCheckout = () => {
-    window.location.href = 'https://buy.stripe.com/14k2aA4Aybzw5ZS8x4'
+    window.location.href = 'https://buy.stripe.com/cN29D2eb8fPM9c4aFd';
   }
 
   const renderPlanDetails = () => {
@@ -1043,13 +1057,13 @@ export default function Component() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md mx-auto mt-[50px]"
       >
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-start mb-6">
           <Image
             src={Logo}
             alt="Logo"
-            width={150}
-            height={50}
-            className="w-[150px] h-auto"
+            width={115}
+            height={40}
+            className="h-10 w-fit"
             priority
           />
         </div>
@@ -1076,27 +1090,6 @@ export default function Component() {
       </motion.div>
     )
   }
-
-  const renderConfirmation = () => (
-    <motion.div
-      key="confirmation"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-md mx-auto mt-[50px] text-center"
-    >
-      <h2 className="text-3xl font-bold text-[#2D2B42] mb-6">Parabéns!</h2>
-      <p className="text-xl text-[#6C6F7F] mb-8">
-        Você agora tem acesso ao Talkie! Faça login e comece a transformar sua comunicação.
-      </p>
-      <button
-        onClick={() => (window.location.href = 'https://example.com/download-app')}
-        className="bg-[#6E56CF] hover:bg-[#5B46B3] text-white rounded-xl px-6 py-3 text-lg font-semibold transition-all duration-200"
-      >
-        Fazer Login
-      </button>
-    </motion.div>
-  )
 
   // Função para mapear o step atual para um número sequencial
   const getProgressStep = (currentStep: number) => {
@@ -1157,7 +1150,6 @@ export default function Component() {
         {step === 12 && renderResult()}
         {step === 15 && renderClosingQuestion(step)}
         {step === 16 && renderPlanDetails()}
-        {step === 17 && renderConfirmation()}
       </div>
       <footer className="py-4 bg-transparent text-center text-[#6C6F7F] text-sm">
         Feito com <span className="text-red-500">❤️</span> em Boston

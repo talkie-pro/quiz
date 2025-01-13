@@ -4,16 +4,24 @@
       "pattern": "**/*.{ts,tsx,js,jsx}",
       "autoformat": true,
       "autofix": true,
-      "autocomplete": true
+      "autocomplete": true,
+      "lint": true
     },
     {
-      "pattern": "**/*.{css,scss}",
+      "pattern": "**/*.{css,scss,less}",
       "autoformat": true,
-      "autofix": true
+      "autofix": true,
+      "lint": true
     },
     {
       "pattern": "**/*.{json,md,yaml,yml}",
-      "autoformat": true
+      "autoformat": true,
+      "lint": true
+    },
+    {
+      "pattern": "**/*.{html,xml}",
+      "autoformat": true,
+      "lint": true
     }
   ],
   "formatOnSave": true,
@@ -22,7 +30,7 @@
   "defaultFormatter": "prettier",
   "gitCommitOnSave": true,
   "gitConfig": {
-    "commitMessageTemplate": "{{type}}: {{description}}",
+    "commitMessageTemplate": "{{type}}({{scope}}): {{description}}",
     "branchPrefix": "feature/",
     "remoteName": "origin",
     "defaultBranch": "main",
@@ -34,14 +42,37 @@
       "style",
       "refactor",
       "test",
-      "chore"
+      "chore",
+      "perf",
+      "ci",
+      "build",
+      "revert"
     ],
     "commitScopes": [
       "ui",
       "api",
       "quiz",
       "auth",
-      "config"
+      "config",
+      "deps",
+      "core",
+      "docs",
+      "tests",
+      "ci"
     ]
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "bracketSpacing": true,
+    "arrowParens": "avoid"
+  },
+  "eslint": {
+    "fix": true,
+    "cache": true,
+    "maxWarnings": 50
   }
 }
